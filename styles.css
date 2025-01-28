@@ -392,6 +392,52 @@ ul.dashed > li:before {
     z-index: 999;
     display: none;
 }
+.game-container {
+    position: relative;
+    width: 100%;
+    height:600px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Schoolbell', cursive;
+}
+
+#background {
+   width: 100%;
+    height: 600px;
+    background-image: url(assets/Magritte_Drag_BG.jpg);
+    background-size: contain;
+    background-position: center;
+    position: relative;
+    background-repeat: no-repeat;
+}
+
+#draggable {
+    width: auto;
+    height: 76%;
+    position: absolute;
+    right: 174px;
+    top: 53.6%;
+    transform: translateY(-50%);
+    cursor: grab;
+}
+
+#draggable:active {
+    cursor: grabbing;
+}
+
+#drop-zone {
+    position: absolute;
+    width: 217px;
+    height: 76%;
+    left: 49px;
+    top: 94px;
+    border: 3px dashed transparent;
+}
+
+#drop-zone.hover {
+    border-color: #FFD700;
+}
+
 
 @keyframes sparkleOut {
     0% { transform: scale(0); opacity: 1; }
