@@ -1,3 +1,36 @@
+const draggable = document.querySelector('.draggable');
+const dropZone = document.querySelector('.drop-zone');
+let isDragging = false;
+let startX;
+
+draggable.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.pageX - draggable.offsetLeft;
+    draggable.style.cursor = 'grabbing';
+});
+
+document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - startX;
+    draggable.style.left = `${x}px`;
+    
+    const dropZoneRect = dropZone.getBoundingClientRect();
+    const draggableRect = draggable.getBoundingClientRect();
+    
+    if (draggableRect.left >= dropZoneRect.left && 
+        draggableRect.right <= dropZoneRect.right) {
+        draggable.style.left = `${dropZoneRect.left}px`;
+        isDragging = false;
+        createSparkles(draggable);
+    }
+});
+
+document.addEventListener('mouseup', () => {
+    isDragging = false;
+    draggable.style.cursor = 'grab';
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
     const artwork = document.querySelector('.artwork');
@@ -9,43 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeButtons = document.querySelectorAll('.close-btn');
     const tooltipText = document.querySelector('.tooltip-text');
     const artistName = document.querySelector('.semibold');
-        const bioBtn = document.getElementById('bioBtn');
+    const bioBtn = document.getElementById('bioBtn');
     const magnifier = document.querySelector('.magnifying-glass');
     const revealBtn = document.querySelector('.reveal-btn');
-
-    // Add the slider functionality
-    const draggable = document.querySelector('.draggable');
-    const dropZone = document.querySelector('.drop-zone');
-    let isDragging = false;
-    let startX;
-
-    draggable.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.pageX - draggable.offsetLeft;
-        draggable.style.cursor = 'grabbing';
-    });
-
-    document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        const x = e.pageX - startX;
-        draggable.style.left = `${x}px`;
-        
-        const dropZoneRect = dropZone.getBoundingClientRect();
-        const draggableRect = draggable.getBoundingClientRect();
-        
-        if (draggableRect.left >= dropZoneRect.left && 
-            draggableRect.right <= dropZoneRect.right) {
-            draggable.style.left = `${dropZoneRect.left}px`;
-            isDragging = false;
-            createSparkles(draggable);
-        }
-    });
-
-    document.addEventListener('mouseup', () => {
-        isDragging = false;
-        draggable.style.cursor = 'grab';
-    });
 
     function updateZoom(e) {
         const rect = artwork.getBoundingClientRect();
@@ -119,27 +118,26 @@ document.addEventListener('DOMContentLoaded', () => {
         magnifier.style.display = 'none';
     });
 
-    // Bio icon opens bio
     bioBtn.addEventListener('click', () => {
         overlay.style.display = 'block';
         bioPopup.style.display = 'block';
     });
-      // Plus icon opens bio
-  plusBtn.addEventListener('click', () => {
-    if (tooltipText.style.visibility === 'visible') {
-        tooltipText.style.visibility = 'hidden';
-        tooltipText.style.display = 'none';
-    } else {
-        tooltipText.style.visibility = 'visible';
-        tooltipText.style.display = 'block';
-    }
-});
+
+    plusBtn.addEventListener('click', () => {
+        if (tooltipText.style.visibility === 'visible') {
+            tooltipText.style.visibility = 'hidden';
+            tooltipText.style.display = 'none';
+        } else {
+            tooltipText.style.visibility = 'visible';
+            tooltipText.style.display = 'block';
+        }
+    });
 
     artistName.addEventListener('click', () => {
-    overlay.style.display = 'block';
-    bioPopup.style.display = 'block';
-});
-    // Close functionality
+        overlay.style.display = 'block';
+        bioPopup.style.display = 'block';
+    });
+
     closeButtons.forEach(button => {
         button.addEventListener('click', () => {
             const popup = button.closest('.popup');
@@ -156,29 +154,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Close on overlay click
- closeButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const popup = button.closest('.popup');
-        if (popup.classList.contains('transport-popup')) {
-            popup.classList.remove('show');
-            setTimeout(() => {
-                popup.style.display = 'none';
-                overlay.style.display = 'none';
-            }, 500);
-        } else {
-            overlay.style.display = 'none';
-            popup.style.display = 'none';
+    document.addEventListener('click', (e) => {
+        if (!e.target.matches('#plusBtn') && !e.target.closest('.tooltip-text')) {
+            tooltipText.style.visibility = 'hidden';
+            tooltipText.style.display = 'none';
         }
     });
-});
-
-    document.addEventListener('click', (e) => {
-    if (!e.target.matches('#plusBtn') && !e.target.closest('.tooltip-text')) {
-        tooltipText.style.visibility = 'hidden';
-        tooltipText.style.display = 'none';
-    }
-});
 
     revealBtn.addEventListener('click', handleReveal);
     
