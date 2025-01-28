@@ -9,6 +9,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeButtons = document.querySelectorAll('.close-btn');
     const tooltipText = document.querySelector('.tooltip-text');
     const artistName = document.querySelector('.semibold');
+        const bioBtn = document.getElementById('bioBtn');
+    const magnifier = document.querySelector('.magnifying-glass');
+    const revealBtn = document.querySelector('.reveal-btn');
+
+    // Add the slider functionality
+    const draggable = document.querySelector('.draggable');
+    const dropZone = document.querySelector('.drop-zone');
+    let isDragging = false;
+    let startX;
+
+    draggable.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.pageX - draggable.offsetLeft;
+        draggable.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - startX;
+        draggable.style.left = `${x}px`;
+        
+        const dropZoneRect = dropZone.getBoundingClientRect();
+        const draggableRect = draggable.getBoundingClientRect();
+        
+        if (draggableRect.left >= dropZoneRect.left && 
+            draggableRect.right <= dropZoneRect.right) {
+            draggable.style.left = `${dropZoneRect.left}px`;
+            isDragging = false;
+            createSparkles(draggable);
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        draggable.style.cursor = 'grab';
+    });
 
     function updateZoom(e) {
         const rect = artwork.getBoundingClientRect();
