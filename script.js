@@ -10,99 +10,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const artistName = document.querySelector('.semibold');
     const bioBtn = document.getElementById('bioBtn');
     const draggable = document.getElementById('draggable');
-    const dropZone = document.getElementById('drop-zone');
-    
-    let isDragging = false;
-    let currentX;
-    let initialX;
-    let xOffset = 0;
+    let isInOriginalPosition = true;
 
-    function updateInitialPosition() {
+    function moveElement() {
         const screenWidth = window.innerWidth;
-        let initialPosition;
+        let targetPosition;
         
-        if (screenWidth > 1200) {
-            initialPosition = 258;
-        } else if (screenWidth > 768) {
-            initialPosition = 220;
-        } else if (screenWidth > 480) {
-            initialPosition = 180;
+        if (isInOriginalPosition) {
+            // Move to drop zone
+            if (screenWidth > 1200) {
+                targetPosition = -258;
+            } else if (screenWidth > 768) {
+                targetPosition = -220;
+            } else if (screenWidth > 480) {
+                targetPosition = -180;
+            } else {
+                targetPosition = -150;
+            }
         } else {
-            initialPosition = 150;
+            // Move back to start
+            if (screenWidth > 1200) {
+                targetPosition = 258;
+            } else if (screenWidth > 768) {
+                targetPosition = 220;
+            } else if (screenWidth > 480) {
+                targetPosition = 180;
+            } else {
+                targetPosition = 150;
+            }
         }
-        
-        draggable.style.transform = `translateX(${initialPosition}px) translateY(-50%)`;
-    }
 
-    updateInitialPosition();
-    window.addEventListener('resize', updateInitialPosition);
-    
-    function setTranslate(xPos) {
-        draggable.style.transform = `translateX(${xPos}px) translateY(-50%)`;
-    }
-
-    function dragStart(e) {
-        initialX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-        xOffset = extractX(draggable.style.transform);
-        isDragging = true;
-        draggable.style.transition = 'none';
-        draggable.style.cursor = 'grabbing';
-    }
-
-    function drag(e) {
-        if (!isDragging) return;
-        e.preventDefault();
+        draggable.style.transition = 'transform 0.6s ease-in-out';
+        draggable.style.transform = `translateX(${targetPosition}px) translateY(-50%)`;
         
-        currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-        const xPos = currentX - initialX + xOffset;
-        
-        draggable.style.transition = 'none';
-        setTranslate(xPos);
-        
-        const draggableRect = draggable.getBoundingClientRect();
-        const dropZoneRect = dropZone.getBoundingClientRect();
-        
-        if (isInDropZone(draggableRect, dropZoneRect)) {
-            isDragging = false;
-            snapToDropZone();
+        if (isInOriginalPosition) {
             createSparkles(draggable);
         }
-    }
-
-    function dragEnd() {
-        isDragging = false;
-        draggable.style.cursor = 'grab';
-        draggable.style.transition = 'transform 0.3s ease-out';
-    }
-
-    function extractX(transform) {
-        const match = transform.match(/translateX\(([-\d.]+)px\)/);
-        return match ? parseFloat(match[1]) : 0;
-    }
-
-    function isInDropZone(dragRect, dropRect) {
-        return !(dragRect.right < dropRect.left || 
-                dragRect.left > dropRect.right || 
-                dragRect.bottom < dropRect.top || 
-                dragRect.top > dropRect.bottom);
-    }
-
-    function snapToDropZone() {
-        const screenWidth = window.innerWidth;
-        let snapPosition;
         
-        if (screenWidth > 1200) {
-            snapPosition = -258;
-        } else if (screenWidth > 768) {
-            snapPosition = -220;
-        } else if (screenWidth > 480) {
-            snapPosition = -180;
-        } else {
-            snapPosition = -150;
-        }
-        
-        draggable.style.transition = 'transform 0.3s ease-out';
-        setTranslate(snapPosition);
+        isInOriginalPosition = !isInOriginalPosition;
     }
 
     function createSparkles(element) {
@@ -120,11 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Bio button functionality
     bioBtn.addEventListener('click', () => {
         overlay.style.display = 'block';
         bioPopup.style.display = 'block';
     });
 
+    // Plus button functionality
     plusBtn.addEventListener('click', () => {
         if (tooltipText.style.visibility === 'visible') {
             tooltipText.style.visibility = 'hidden';
@@ -135,11 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Artist name click
     artistName.addEventListener('click', () => {
         overlay.style.display = 'block';
         bioPopup.style.display = 'block';
     });
 
+    // Close buttons functionality
     closeButtons.forEach(button => {
         button.addEventListener('click', () => {
             const popup = button.closest('.popup');
@@ -148,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Close tooltip when clicking outside
     document.addEventListener('click', (e) => {
         if (!e.target.matches('#plusBtn') && !e.target.closest('.tooltip-text')) {
             tooltipText.style.visibility = 'hidden';
@@ -155,11 +105,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    draggable.addEventListener('touchstart', dragStart, false);
-    document.addEventListener('touchmove', drag, { passive: false });
-    document.addEventListener('touchend', dragEnd, false);
+    // Handle both click and touch events for draggable
+    draggable.addEventListener('click', moveElement);
+    draggable.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        moveElement();
+    });
 
-    draggable.addEventListener('mousedown', dragStart, false);
-    document.addEventListener('mousemove', drag, false);
-    document.addEventListener('mouseup', dragEnd, false);
+    // Set initial position
+    const screenWidth = window.innerWidth;
+    let initialPosition;
+    
+    if (screenWidth > 1200) {
+        initialPosition = 258;
+    } else if (screenWidth > 768) {
+        initialPosition = 220;
+    } else if (screenWidth > 480) {
+        initialPosition = 180;
+    } else {
+        initialPosition = 150;
+    }
+    
+    draggable.style.transform = `translateX(${initialPosition}px) translateY(-50%)`;
 });
