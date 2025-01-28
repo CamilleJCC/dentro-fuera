@@ -18,10 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeButtons = document.querySelectorAll('.close-btn');
 
     // Drag and Drop Elements
-    const draggable = document.getElementById('draggable');
+       const draggable = document.getElementById('draggable');
     const dropZone = document.getElementById('drop-zone');
 
-    // Drag and Drop Functionality
     draggable.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', 'draggable');
     });
@@ -45,13 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data === 'draggable') {
             dropZone.appendChild(draggable);
             draggable.style.position = 'relative';
-            draggable.style.left = 'auto';
-            draggable.style.top = 'auto';
-            draggable.style.transform = 'none';
+            draggable.style.left = '0';
+            draggable.style.top = '50%';
+            draggable.style.transform = 'translateY(-50%)';
         }
         dropZone.classList.remove('hover');
     });
-
+});
     // Popup Functionality
     closeButtons.forEach(button => {
         button.addEventListener('click', () => {
