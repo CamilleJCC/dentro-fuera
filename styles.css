@@ -345,13 +345,17 @@ ul.dashed > li:before {
 }
 
 #draggable {
-    width: auto;
+    width: 18%;
     height: 76%;
-    position: absolute;
-    right: 174px;
-    top: 53.6%;
-    transform: translateY(-50%);
+    position: relative;
+    display: inline-block;
+    left: 60%;
+    top: 15%;
     cursor: grab;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
 }
 
 #draggable:active {
@@ -359,12 +363,13 @@ ul.dashed > li:before {
 }
 
 #drop-zone {
-    position: absolute;
-    width: 217px;
+    position: relative;
+    width: 18%;
     height: 76%;
-    left: 49px;
-    top: 94px;
+    left: 4%;
+    top: 15%;
     border: 3px dashed transparent;
+    display: inline-block;
 }
 
 #drop-zone.hover {
