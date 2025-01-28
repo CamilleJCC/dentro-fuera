@@ -8,6 +8,7 @@ set(testRef, {
     status: 'connected'
 });
 */
+
 document.addEventListener('DOMContentLoaded', () => {
     // Popup Elements
     const plusIcon = document.querySelector('.plus-icon');
@@ -21,10 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const draggable = document.getElementById('draggable');
     const dropZone = document.getElementById('drop-zone');
 
+    // Set initial size to match drop zone dimensions
+    draggable.style.width = '217px';
+    draggable.style.height = '76%';
+
     // Drag and Drop Functionality
     draggable.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', 'draggable');
-        // Add a class during drag if needed
         draggable.classList.add('dragging');
     });
 
@@ -46,17 +50,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = e.dataTransfer.getData('text/plain');
         if (data === 'draggable') {
             dropZone.appendChild(draggable);
-            // Maintain the exact positioning within drop zone
             draggable.style.position = 'absolute';
             draggable.style.left = '0';
             draggable.style.top = '0';
             draggable.style.right = 'auto';
+            draggable.style.width = '217px';
             draggable.style.height = '100%';
             draggable.style.transform = 'none';
         }
         dropZone.classList.remove('hover');
         draggable.classList.remove('dragging');
     });
+
     // Popup Functionality
     closeButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -86,7 +91,3 @@ document.addEventListener('DOMContentLoaded', () => {
         dreamPopup.style.display = 'none';
     });
 });
-
-
-
-
