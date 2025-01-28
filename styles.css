@@ -344,7 +344,7 @@ ul.dashed > li:before {
 }
 
 #draggable {
-    width: 217px;
+    width: auto;
     height: 76%;
     position: absolute;
     right: 176px;
