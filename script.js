@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
-    const magnifier = document.querySelector('.magnifying-glass');
     const artwork = document.querySelector('.artwork');
-    const revealBtn = document.querySelector('.reveal-btn');
     const inputs = document.querySelectorAll('.magic-input');
     const plusBtn = document.getElementById('plusBtn');
     const bioPopup = document.getElementById('bioPopup');
