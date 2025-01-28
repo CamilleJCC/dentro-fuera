@@ -359,11 +359,10 @@ ul.dashed > li:before {
 
 #drop-zone {
     position: absolute;
-    width: 120px;
-    height: 120px;
-    /* Adjust these values to position your drop zone */
-    left: 300px;
-    top: 200px;
+    width: 217px;
+    height: 76%;
+    left: 49px;
+    top: 94px;
     border: 3px dashed transparent;
 }
 
