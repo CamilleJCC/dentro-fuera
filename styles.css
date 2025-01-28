@@ -325,50 +325,40 @@ ul.dashed > li:before {
     z-index: 999;
     display: none;
 }
+
+
 .game-container {
     position: relative;
-    width: 100%;
-    height:600px;
-    max-width: 1200px;
-    margin: 0 auto;
-    font-family: 'Schoolbell', cursive;
-}
-
-#background {
-   width: 100%;
-    height: 600px;
-    background-image: url(assets/Magritte_Drag_BG.jpg);
-    background-size: contain;
-    background-position: center;
-    position: relative;
-    background-repeat: no-repeat;
+    width: 60%;
+    height: 100vh;
+    max-height: 900px;
 }
 
 #draggable {
-    width: auto;
+    width: 15vw;
     height: 76%;
     position: absolute;
-    right: 174px;
+    right: 12vw;
     top: 53.6%;
     transform: translateY(-50%);
     cursor: grab;
-}
-
-#draggable:active {
-    cursor: grabbing;
+    max-width: 217px;
 }
 
 #drop-zone {
     position: absolute;
-    width: 217px;
+    width: 15vw;
     height: 76%;
-    left: 49px;
+    left: calc(5% + 49px);
     top: 94px;
     border: 3px dashed transparent;
+    max-width: 217px;
 }
 
-#drop-zone.hover {
-    border-color: #FFD700;
+@media screen and (min-width: 1440px) {
+    #draggable, #drop-zone {
+        width: 217px;
+    }
 }
 
 
