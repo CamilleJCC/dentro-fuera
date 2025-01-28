@@ -348,7 +348,7 @@ ul.dashed > li:before {
     width: auto;
     height: 76%;
     position: absolute;
-    right: 176px;
+    right: 174px;
     top: 53.6%;
     transform: translateY(-50%);
     cursor: grab;
