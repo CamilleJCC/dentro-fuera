@@ -1,104 +1,114 @@
-/*import { db } from './firebase-config.js';
-import { ref, set, push } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js';
-
-// Test connection outside DOMContentLoaded
-const testRef = ref(db, 'connection-test');
-set(testRef, {
-    lastAccess: new Date().toISOString(),
-    status: 'connected'
-});
-*/
 document.addEventListener('DOMContentLoaded', () => {
-    // Popup Elements
-    const plusIcon = document.querySelector('.plus-icon');
-    const overlay = document.getElementById('overlay');
+    // DOM Elements
+    const magnifier = document.querySelector('.magnifying-glass');
+    const artwork = document.querySelector('.artwork');
+    const revealBtn = document.querySelector('.reveal-btn');
+    const inputs = document.querySelectorAll('.magic-input');
+    const plusBtn = document.getElementById('plusBtn');
     const bioPopup = document.getElementById('bioPopup');
-    const transportPopup = document.getElementById('transportPopup');
-    const dreamPopup = document.getElementById('dreamPopup');
+    const plusPopup = document.getElementById('tooltipText');
+    const overlay = document.getElementById('overlay');
     const closeButtons = document.querySelectorAll('.close-btn');
+    const tooltipText = document.querySelector('.tooltip-text');
+    const artistName = document.querySelector('.semibold');
 
-    // Drag and Drop Elements
-    const draggable = document.getElementById('draggable');
-    const dropZone = document.getElementById('drop-zone');
-
-    // Touch Event Handlers
-    draggable.addEventListener('touchstart', handleTouchStart, { passive: false });
-    draggable.addEventListener('touchmove', handleTouchMove, { passive: false });
-    draggable.addEventListener('touchend', handleTouchEnd);
-
-    function handleTouchStart(e) {
-        e.preventDefault();
-        draggable.classList.add('dragging');
-    }
-
-    function handleTouchMove(e) {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const newX = touch.clientX - draggable.offsetWidth / 2;
-        draggable.style.left = `${newX}px`;
-    }
-
-    function handleTouchEnd() {
-        draggable.classList.remove('dragging');
-        const dropRect = dropZone.getBoundingClientRect();
-        const dragRect = draggable.getBoundingClientRect();
-
-        if (isOverlapping(dragRect, dropRect)) {
-            dropZone.appendChild(draggable);
-            draggable.style.position = 'relative';
-            draggable.style.left = '0';
-            draggable.style.top = '0';
+    function updateZoom(e) {
+        const rect = artwork.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const maxX = rect.width - magnifier.offsetWidth;
+        const maxY = rect.height - magnifier.offsetHeight;
+        
+        const boundedX = Math.max(0, Math.min(maxX, x - magnifier.offsetWidth / 2));
+        const boundedY = Math.max(0, Math.min(maxY, y - magnifier.offsetHeight / 2));
+        
+        if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+            magnifier.style.display = 'block';
+            magnifier.style.left = `${boundedX}px`;
+            magnifier.style.top = `${boundedY}px`;
+            magnifier.style.backgroundImage = `url(${artwork.src})`;
+            magnifier.style.backgroundPosition = `${-x * 2 + magnifier.offsetWidth/2}px ${-y * 2 + magnifier.offsetHeight/2}px`;
+            magnifier.style.backgroundSize = `${artwork.width * 2}px`;
+        } else {
+            magnifier.style.display = 'none';
         }
     }
 
-    function isOverlapping(rect1, rect2) {
-        return !(rect1.right < rect2.left || 
-                rect1.left > rect2.right || 
-                rect1.bottom < rect2.top || 
-                rect1.top > rect2.bottom);
+    function createSparkles(element) {
+        const rect = element.getBoundingClientRect();
+        for (let i = 0; i < 30; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            const x = Math.random() * rect.width;
+            const y = Math.random() * rect.height;
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            sparkle.style.backgroundColor = `hsl(${Math.random() * 360}, 50%, 50%)`;
+            element.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 1500);
+        }
     }
 
-    // Drag and Drop Functionality
-    draggable.addEventListener('dragstart', (e) => {
-        e.dataTransfer.setData('text/plain', 'draggable');
-        draggable.classList.add('dragging');
+    function getRandomColor() {
+        const colors = [
+            '#b5f0de',
+            '#fab8a1',
+            '#faf7ba',
+            '#c2b2ff'
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function showAnswerPopup(answer, index) {
+        overlay.style.display = 'block';
+        const popup = document.getElementById(`answer${index + 1}Popup`);
+        popup.querySelector('.answer-text').textContent = answer;
+        popup.style.display = 'block';
+        setTimeout(() => {
+            popup.classList.add('show');
+        }, 10);
+    }
+
+    function handleReveal() {
+        inputs.forEach((input, index) => {
+            if (input.value.trim()) {
+                showAnswerPopup(input.value, index);
+            }
+        });
+    }
+
+    // Event Listeners
+    artwork.addEventListener('mousemove', updateZoom);
+    artwork.addEventListener('mouseleave', () => {
+        magnifier.style.display = 'none';
     });
 
-    dropZone.addEventListener('dragenter', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('hover');
+    // Bio icon opens bio
+    bioBtn.addEventListener('click', () => {
+        overlay.style.display = 'block';
+        bioPopup.style.display = 'block';
     });
+      // Plus icon opens bio
+  plusBtn.addEventListener('click', () => {
+    if (tooltipText.style.visibility === 'visible') {
+        tooltipText.style.visibility = 'hidden';
+        tooltipText.style.display = 'none';
+    } else {
+        tooltipText.style.visibility = 'visible';
+        tooltipText.style.display = 'block';
+    }
+});
 
-    dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('hover');
-    });
-
-    dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-    });
-
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        const data = e.dataTransfer.getData('text/plain');
-        if (data === 'draggable') {
-            dropZone.appendChild(draggable);
-            draggable.style.position = 'absolute';
-            draggable.style.left = '0';
-            draggable.style.top = '0';
-            draggable.style.right = 'auto';
-            draggable.style.width = 'auto';
-            draggable.style.height = '100%';
-            draggable.style.transform = 'none';
-        }
-        dropZone.classList.remove('hover');
-        draggable.classList.remove('dragging');
-    });
-
-    // Popup Functionality
+    artistName.addEventListener('click', () => {
+    overlay.style.display = 'block';
+    bioPopup.style.display = 'block';
+});
+    // Close functionality
     closeButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const popup = button.parentElement;
-            if (popup.classList.contains('answer-popup')) {
+            const popup = button.closest('.popup');
+            if (popup.classList.contains('transport-popup')) {
                 popup.classList.remove('show');
                 setTimeout(() => {
                     popup.style.display = 'none';
@@ -111,16 +121,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    plusIcon.addEventListener('click', () => {
-        overlay.style.display = 'block';
-        bioPopup.style.display = 'block';
-    });
-
-    overlay.addEventListener('click', () => {
-        overlay.style.display = 'none';
-        bioPopup.style.display = 'none';
-        transportPopup.style.display = 'none';
-        dreamPopup.style.display = 'none';
+    // Close on overlay click
+ closeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const popup = button.closest('.popup');
+        if (popup.classList.contains('transport-popup')) {
+            popup.classList.remove('show');
+            setTimeout(() => {
+                popup.style.display = 'none';
+                overlay.style.display = 'none';
+            }, 500);
+        } else {
+            overlay.style.display = 'none';
+            popup.style.display = 'none';
+        }
     });
 });
 
+    document.addEventListener('click', (e) => {
+    if (!e.target.matches('#plusBtn') && !e.target.closest('.tooltip-text')) {
+        tooltipText.style.visibility = 'hidden';
+        tooltipText.style.display = 'none';
+    }
+});
+
+    revealBtn.addEventListener('click', handleReveal);
+    
+    inputs.forEach(input => {
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleReveal();
+            }
+        });
+    });
+});
