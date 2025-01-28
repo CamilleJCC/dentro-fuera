@@ -41,27 +41,26 @@ document.addEventListener('DOMContentLoaded', () => {
         draggable.style.cursor = 'grabbing';
     }
 
-    function drag(e) {
-        if (!isDragging) return;
-        e.preventDefault();
-        
-        currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-        const xPos = currentX - initialX + xOffset;
-        
-        // Add visual feedback during dragging
-        draggable.style.transition = 'none';
-        setTranslate(xPos);
-        
-        const draggableRect = draggable.getBoundingClientRect();
-        const dropZoneRect = dropZone.getBoundingClientRect();
-        
-        if (isInDropZone(draggableRect, dropZoneRect)) {
-            isDragging = false;
-            draggable.style.transition = 'transform 0.3s ease-out';
-            snapToDropZone();
-            createSparkles(draggable);
-        }
+  function drag(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    
+    currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+    const xPos = currentX - initialX + xOffset;
+    
+    // Remove transition for immediate response
+    draggable.style.transition = 'none';
+    setTranslate(xPos);
+    
+    const draggableRect = draggable.getBoundingClientRect();
+    const dropZoneRect = dropZone.getBoundingClientRect();
+    
+    if (isInDropZone(draggableRect, dropZoneRect)) {
+        isDragging = false;
+        snapToDropZone();
+        createSparkles(draggable);
     }
+}
 
     function dragEnd() {
         isDragging = false;
@@ -74,20 +73,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return match ? parseFloat(match[1]) : 0;
     }
 
-    function isInDropZone(dragRect, dropRect) {
-        const overlap = !(dragRect.right < dropRect.left || 
-                         dragRect.left > dropRect.right || 
-                         dragRect.bottom < dropRect.top || 
-                         dragRect.top > dropRect.bottom);
-        
-        if (overlap) {
-            dropZone.style.borderColor = '#FFD700';
-        } else {
-            dropZone.style.borderColor = 'transparent';
-        }
-        
-        return overlap;
-    }
+  function isInDropZone(dragRect, dropRect) {
+    return !(dragRect.right < dropRect.left || 
+             dragRect.left > dropRect.right || 
+             dragRect.bottom < dropRect.top || 
+             dragRect.top > dropRect.bottom);
+}
 
     function snapToDropZone() {
         const screenWidth = window.innerWidth;
