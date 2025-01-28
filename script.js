@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let initialPosition;
     
     if (screenWidth > 1200) {
-        initialPosition = 258;
+        initialPosition = 0;
     } else if (screenWidth > 768) {
         initialPosition = 220;
     } else if (screenWidth > 480) {
