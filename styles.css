@@ -325,6 +325,51 @@ ul.dashed > li:before {
     z-index: 999;
     display: none;
 }
+.game-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Schoolbell', cursive;
+}
+
+#background {
+    width: 100%;
+    height: 600px;
+    background-image: url('your-background-image.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+#draggable {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: grab;
+}
+
+#draggable:active {
+    cursor: grabbing;
+}
+
+#drop-zone {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    /* Adjust these values to position your drop zone */
+    left: 300px;
+    top: 200px;
+    border: 3px dashed transparent;
+}
+
+#drop-zone.hover {
+    border-color: #FFD700;
+}
+
 
 @keyframes sparkleOut {
     0% { transform: scale(0); opacity: 1; }
