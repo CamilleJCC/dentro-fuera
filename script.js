@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
             draggable.style.left = '0';
             draggable.style.top = '0';
             draggable.style.right = 'auto';
-            draggable.style.width = '217px';
+            draggable.style.width = 'auto';
             draggable.style.height = '100%';
             draggable.style.transform = 'none';
         }
