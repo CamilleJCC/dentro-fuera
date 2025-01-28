@@ -26,6 +26,51 @@ document.addEventListener('DOMContentLoaded', () => {
     draggable.style.width = 'auto';
     draggable.style.height = '75.5%';
 
+    // Touch Event Handlers
+    draggable.addEventListener('touchstart', handleTouchStart, { passive: false });
+    draggable.addEventListener('touchmove', handleTouchMove, { passive: false });
+    draggable.addEventListener('touchend', handleTouchEnd);
+
+    function handleTouchStart(e) {
+        e.preventDefault();
+        draggable.classList.add('dragging');
+    }
+
+    function handleTouchMove(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const x = touch.clientX - draggable.offsetWidth / 2;
+        const y = touch.clientY - draggable.offsetHeight / 2;
+        
+        draggable.style.position = 'absolute';
+        draggable.style.left = `${x}px`;
+        draggable.style.top = `${y}px`;
+    }
+
+    function handleTouchEnd(e) {
+        draggable.classList.remove('dragging');
+        const dropRect = dropZone.getBoundingClientRect();
+        const dragRect = draggable.getBoundingClientRect();
+
+        if (isOverlapping(dragRect, dropRect)) {
+            dropZone.appendChild(draggable);
+            draggable.style.position = 'absolute';
+            draggable.style.left = '0';
+            draggable.style.top = '0';
+            draggable.style.right = 'auto';
+            draggable.style.width = 'auto';
+            draggable.style.height = '100%';
+            draggable.style.transform = 'none';
+        }
+    }
+
+    function isOverlapping(rect1, rect2) {
+        return !(rect1.right < rect2.left || 
+                rect1.left > rect2.right || 
+                rect1.bottom < rect2.top || 
+                rect1.top > rect2.bottom);
+    }
+
     // Drag and Drop Functionality
     draggable.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', 'draggable');
@@ -91,3 +136,4 @@ document.addEventListener('DOMContentLoaded', () => {
         dreamPopup.style.display = 'none';
     });
 });
+
