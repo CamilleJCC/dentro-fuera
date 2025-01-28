@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
     const artwork = document.querySelector('.artwork');
     const inputs = document.querySelectorAll('.magic-input');
     const plusBtn = document.getElementById('plusBtn');
@@ -18,14 +17,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let initialX;
     let xOffset = 0;
 
-    // Make draggable responsive to screen size
     function updateInitialPosition() {
         const screenWidth = window.innerWidth;
-        const initialPosition = screenWidth > 768 ? 0 : -50; // Adjust based on screen size
+        let initialPosition;
+        
+        if (screenWidth > 1200) {
+            initialPosition = 258;
+        } else if (screenWidth > 768) {
+            initialPosition = 220;
+        } else if (screenWidth > 480) {
+            initialPosition = 180;
+        } else {
+            initialPosition = 150;
+        }
+        
         draggable.style.transform = `translateX(${initialPosition}px) translateY(-50%)`;
     }
 
-    // Call on load and resize
     updateInitialPosition();
     window.addEventListener('resize', updateInitialPosition);
     
@@ -41,26 +49,25 @@ document.addEventListener('DOMContentLoaded', () => {
         draggable.style.cursor = 'grabbing';
     }
 
-  function drag(e) {
-    if (!isDragging) return;
-    e.preventDefault();
-    
-    currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-    const xPos = currentX - initialX + xOffset;
-    
-    // Remove transition for immediate response
-    draggable.style.transition = 'none';
-    setTranslate(xPos);
-    
-    const draggableRect = draggable.getBoundingClientRect();
-    const dropZoneRect = dropZone.getBoundingClientRect();
-    
-    if (isInDropZone(draggableRect, dropZoneRect)) {
-        isDragging = false;
-        snapToDropZone();
-        createSparkles(draggable);
+    function drag(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        
+        currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+        const xPos = currentX - initialX + xOffset;
+        
+        draggable.style.transition = 'none';
+        setTranslate(xPos);
+        
+        const draggableRect = draggable.getBoundingClientRect();
+        const dropZoneRect = dropZone.getBoundingClientRect();
+        
+        if (isInDropZone(draggableRect, dropZoneRect)) {
+            isDragging = false;
+            snapToDropZone();
+            createSparkles(draggable);
+        }
     }
-}
 
     function dragEnd() {
         isDragging = false;
@@ -73,16 +80,27 @@ document.addEventListener('DOMContentLoaded', () => {
         return match ? parseFloat(match[1]) : 0;
     }
 
-  function isInDropZone(dragRect, dropRect) {
-    return !(dragRect.right < dropRect.left || 
-             dragRect.left > dropRect.right || 
-             dragRect.bottom < dropRect.top || 
-             dragRect.top > dropRect.bottom);
-}
+    function isInDropZone(dragRect, dropRect) {
+        return !(dragRect.right < dropRect.left || 
+                dragRect.left > dropRect.right || 
+                dragRect.bottom < dropRect.top || 
+                dragRect.top > dropRect.bottom);
+    }
 
     function snapToDropZone() {
         const screenWidth = window.innerWidth;
-        const snapPosition = screenWidth > 768 ? -258 : -150; // Responsive snap position
+        let snapPosition;
+        
+        if (screenWidth > 1200) {
+            snapPosition = -258;
+        } else if (screenWidth > 768) {
+            snapPosition = -220;
+        } else if (screenWidth > 480) {
+            snapPosition = -180;
+        } else {
+            snapPosition = -150;
+        }
+        
         draggable.style.transition = 'transform 0.3s ease-out';
         setTranslate(snapPosition);
     }
@@ -102,13 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Bio button functionality
     bioBtn.addEventListener('click', () => {
         overlay.style.display = 'block';
         bioPopup.style.display = 'block';
     });
 
-    // Plus button functionality
     plusBtn.addEventListener('click', () => {
         if (tooltipText.style.visibility === 'visible') {
             tooltipText.style.visibility = 'hidden';
@@ -119,13 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Artist name click
     artistName.addEventListener('click', () => {
         overlay.style.display = 'block';
         bioPopup.style.display = 'block';
     });
 
-    // Close buttons functionality
     closeButtons.forEach(button => {
         button.addEventListener('click', () => {
             const popup = button.closest('.popup');
@@ -134,7 +148,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Close tooltip when clicking outside
     document.addEventListener('click', (e) => {
         if (!e.target.matches('#plusBtn') && !e.target.closest('.tooltip-text')) {
             tooltipText.style.visibility = 'hidden';
@@ -142,12 +155,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Touch Events for dragging
     draggable.addEventListener('touchstart', dragStart, false);
     document.addEventListener('touchmove', drag, { passive: false });
     document.addEventListener('touchend', dragEnd, false);
 
-    // Mouse Events for dragging
     draggable.addEventListener('mousedown', dragStart, false);
     document.addEventListener('mousemove', drag, false);
     document.addEventListener('mouseup', dragEnd, false);
