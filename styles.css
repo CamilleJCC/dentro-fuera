@@ -344,8 +344,8 @@ ul.dashed > li:before {
 }
 
 #draggable {
-    width: auto;
-    height: 75.4%;
+    width: 217px;
+    height: 76%;
     position: absolute;
     right: 176px;
     top: 53.6%;
@@ -369,6 +369,7 @@ ul.dashed > li:before {
 #drop-zone.hover {
     border-color: #FFD700;
 }
+
 
 
 @keyframes sparkleOut {
