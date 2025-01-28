@@ -325,50 +325,63 @@ ul.dashed > li:before {
     z-index: 999;
     display: none;
 }
+#draggable {
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+/* Responsive game container */
 .game-container {
     position: relative;
     width: 100%;
-    height:600px;
-    max-width: 1200px;
-    margin: 0 auto;
-    font-family: 'Schoolbell', cursive;
+    height: 60vh;
+    min-height: 400px;
+    max-height: 600px;
 }
 
 #background {
-   width: 100%;
-    height: 600px;
-    background-image: url(assets/Magritte_Drag_BG.jpg);
+    width: 100%;
+    height: 100%;
     background-size: contain;
-    background-position: center;
-    position: relative;
-    background-repeat: no-repeat;
 }
 
+/* Responsive draggable and drop zone */
 #draggable {
-    width: auto;
+    width: min(auto, 217px);
     height: 76%;
-    position: absolute;
-    right: 174px;
-    top: 53.6%;
-    transform: translateY(-50%);
-    cursor: grab;
-}
-
-#draggable:active {
-    cursor: grabbing;
+    right: min(174px, 15%);
 }
 
 #drop-zone {
-    position: absolute;
-    width: 217px;
+    width: min(217px, 30%);
     height: 76%;
-    left: 49px;
-    top: 94px;
-    border: 3px dashed transparent;
+    left: min(49px, 8%);
 }
 
-#drop-zone.hover {
-    border-color: #FFD700;
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+    .game-container {
+        height: 50vh;
+    }
+
+    #draggable {
+        right: 10%;
+        height: 70%;
+    }
+
+    #drop-zone {
+        left: 5%;
+        height: 70%;
+    }
+}
+
+/* Small screen adjustments */
+@media (max-width: 480px) {
+    .game-container {
+        height: 40vh;
+    }
 }
 
 
