@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function snapToDropZone() {
         const screenWidth = window.innerWidth;
-        const snapPosition = screenWidth > 768 ? -200 : -150; // Responsive snap position
+        const snapPosition = screenWidth > 768 ? -258 : -150; // Responsive snap position
         draggable.style.transition = 'transform 0.3s ease-out';
         setTranslate(snapPosition);
     }
