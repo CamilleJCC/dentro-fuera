@@ -8,7 +8,37 @@ set(testRef, {
     status: 'connected'
 });
 */
+draggable.addEventListener('touchstart', handleTouchStart, { passive: false });
+draggable.addEventListener('touchmove', handleTouchMove, { passive: false });
+draggable.addEventListener('touchend', handleTouchEnd);
 
+function handleTouchStart(e) {
+    e.preventDefault();
+}
+
+function handleTouchMove(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const newX = touch.clientX - draggable.offsetWidth / 2;
+    draggable.style.left = `${newX}px`;
+}
+
+function handleTouchEnd() {
+    const dropRect = dropZone.getBoundingClientRect();
+    const dragRect = draggable.getBoundingClientRect();
+    
+    if (isOverlapping(dragRect, dropRect)) {
+        dropZone.appendChild(draggable);
+        draggable.style.left = '0';
+    }
+}
+
+function isOverlapping(rect1, rect2) {
+    return !(rect1.right < rect2.left || 
+            rect1.left > rect2.right || 
+            rect1.bottom < rect2.top || 
+            rect1.top > rect2.bottom);
+}
 document.addEventListener('DOMContentLoaded', () => {
     // Popup Elements
     const plusIcon = document.querySelector('.plus-icon');
