@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set initial size to match drop zone dimensions
     draggable.style.width = 'auto';
-    draggable.style.height = '76%';
+    draggable.style.height = '75.5%';
 
     // Drag and Drop Functionality
     draggable.addEventListener('dragstart', (e) => {
