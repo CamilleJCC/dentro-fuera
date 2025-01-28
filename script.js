@@ -18,8 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let initialX;
     let xOffset = 0;
 
-    // Set initial position
-    draggable.style.transform = 'translateX(0px) translateY(-50%)';
+    // Make draggable responsive to screen size
+    function updateInitialPosition() {
+        const screenWidth = window.innerWidth;
+        const initialPosition = screenWidth > 768 ? 0 : -50; // Adjust based on screen size
+        draggable.style.transform = `translateX(${initialPosition}px) translateY(-50%)`;
+    }
+
+    // Call on load and resize
+    updateInitialPosition();
+    window.addEventListener('resize', updateInitialPosition);
     
     function setTranslate(xPos) {
         draggable.style.transform = `translateX(${xPos}px) translateY(-50%)`;
@@ -29,6 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
         initialX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
         xOffset = extractX(draggable.style.transform);
         isDragging = true;
+        draggable.style.transition = 'none';
+        draggable.style.cursor = 'grabbing';
     }
 
     function drag(e) {
@@ -38,6 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
         const xPos = currentX - initialX + xOffset;
         
+        // Add visual feedback during dragging
+        draggable.style.transition = 'none';
         setTranslate(xPos);
         
         const draggableRect = draggable.getBoundingClientRect();
@@ -45,13 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (isInDropZone(draggableRect, dropZoneRect)) {
             isDragging = false;
-            snapToDropZone(dropZoneRect);
+            draggable.style.transition = 'transform 0.3s ease-out';
+            snapToDropZone();
             createSparkles(draggable);
         }
     }
 
     function dragEnd() {
         isDragging = false;
+        draggable.style.cursor = 'grab';
+        draggable.style.transition = 'transform 0.3s ease-out';
     }
 
     function extractX(transform) {
@@ -60,15 +75,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function isInDropZone(dragRect, dropRect) {
-        return !(dragRect.right < dropRect.left || 
-                dragRect.left > dropRect.right || 
-                dragRect.bottom < dropRect.top || 
-                dragRect.top > dropRect.bottom);
+        const overlap = !(dragRect.right < dropRect.left || 
+                         dragRect.left > dropRect.right || 
+                         dragRect.bottom < dropRect.top || 
+                         dragRect.top > dropRect.bottom);
+        
+        if (overlap) {
+            dropZone.style.borderColor = '#FFD700';
+        } else {
+            dropZone.style.borderColor = 'transparent';
+        }
+        
+        return overlap;
     }
 
-    function snapToDropZone(dropRect) {
-        const xPos = dropRect.left - draggable.offsetLeft;
-        setTranslate(xPos);
+    function snapToDropZone() {
+        const screenWidth = window.innerWidth;
+        const snapPosition = screenWidth > 768 ? -200 : -150; // Responsive snap position
+        draggable.style.transition = 'transform 0.3s ease-out';
+        setTranslate(snapPosition);
     }
 
     function createSparkles(element) {
@@ -128,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Touch Events for dragging
     draggable.addEventListener('touchstart', dragStart, false);
-    document.addEventListener('touchmove', drag, false);
+    document.addEventListener('touchmove', drag, { passive: false });
     document.addEventListener('touchend', dragEnd, false);
 
     // Mouse Events for dragging
