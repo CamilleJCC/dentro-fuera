@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // Move back to start
             if (screenWidth > 1200) {
-                targetPosition = 258;
+                targetPosition = 0;
             } else if (screenWidth > 768) {
                 targetPosition = 220;
             } else if (screenWidth > 480) {
