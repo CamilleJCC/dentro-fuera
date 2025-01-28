@@ -328,6 +328,7 @@ ul.dashed > li:before {
 .game-container {
     position: relative;
     width: 100%;
+    height:600px;
     max-width: 1200px;
     margin: 0 auto;
     font-family: 'Schoolbell', cursive;
