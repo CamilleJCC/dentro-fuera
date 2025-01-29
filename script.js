@@ -5,10 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const revealBtn = document.querySelector('.reveal-btn');
     const inputs = document.querySelectorAll('.magic-input');
     const plusBtn = document.getElementById('plusBtn');
-    const questionBtn = document.getElementById('questionBtn');
     const bioPopup = document.getElementById('bioPopup');
     const plusPopup = document.getElementById('tooltipText');
-    const questionPopup = document.getElementById('questionPopup');
     const overlay = document.getElementById('overlay');
     const closeButtons = document.querySelectorAll('.close-btn');
     const tooltipText = document.querySelector('.tooltip-text');
@@ -101,32 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
         tooltipText.style.display = 'block';
     }
 });
-    // Question mark opens sabias que
-    questionBtn.addEventListener('click', () => {
-        overlay.style.display = 'block';
-        questionPopup.style.display = 'block';
-    });
 
     artistName.addEventListener('click', () => {
     overlay.style.display = 'block';
     bioPopup.style.display = 'block';
 });
-    // Close functionality
-    closeButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const popup = button.closest('.popup');
-            if (popup.classList.contains('transport-popup')) {
-                popup.classList.remove('show');
-                setTimeout(() => {
-                    popup.style.display = 'none';
-                    overlay.style.display = 'none';
-                }, 500);
-            } else {
-                overlay.style.display = 'none';
-                popup.style.display = 'none';
-            }
-        });
-    });
 
     // Close on overlay click
  closeButtons.forEach(button => {
