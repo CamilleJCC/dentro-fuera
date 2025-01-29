@@ -241,7 +241,8 @@ background: #b5f0de;
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: -2rem;
+    margin-top: 2rem;
+    justify-content: flex-end;
 }
 
 .plus-icon {
@@ -270,7 +271,7 @@ width: 32px;
     position: relative;
     transition: all 0.3s ease;
     font-family: 'InterTight';
-    font-size: 20px;
+    font-size: 26px;
     color:white;
 }
 .bio-icon:hover {
@@ -315,8 +316,8 @@ width: 32px;
     border-radius: 100px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: max-content;
-    left: 42px;
-    top: -3px;
+    right: 38px;
+    top: -4px;
     z-index: 1000;
     font-size: 1rem;
     padding: 0.6rem 1.3rem;
@@ -392,52 +393,6 @@ ul.dashed > li:before {
     z-index: 999;
     display: none;
 }
-.game-container {
-    position: relative;
-    width: 100%;
-    height:600px;
-    max-width: 1200px;
-    margin: 0 auto;
-    font-family: 'Schoolbell', cursive;
-}
-
-#background {
-   width: 100%;
-    height: 600px;
-    background-image: url(assets/Magritte_Drag_BG.jpg);
-    background-size: contain;
-    background-position: center;
-    position: relative;
-    background-repeat: no-repeat;
-}
-
-#draggable {
-    width: auto;
-    height: 76%;
-    position: absolute;
-    right: 174px;
-    top: 53.6%;
-    transform: translateY(-50%);
-    cursor: grab;
-}
-
-#draggable:active {
-    cursor: grabbing;
-}
-
-#drop-zone {
-    position: absolute;
-    width: 217px;
-    height: 76%;
-    left: 49px;
-    top: 94px;
-    border: 3px dashed transparent;
-}
-
-#drop-zone.hover {
-    border-color: #FFD700;
-}
-
 
 @keyframes sparkleOut {
     0% { transform: scale(0); opacity: 1; }
@@ -575,7 +530,7 @@ font-size: 1.3rem;
 /* Media Queries */
 @media (min-width: 768px) {
     .investigation-container {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1.5fr 1fr;
         padding: 0rem 1rem;
         align-items: center;
         gap: 4rem;
@@ -605,12 +560,25 @@ font-size: 1.3rem;
 }
 @media (max-width:1000px){
     h2 {
-        width:100%;
+        width: 95%;
+        padding: 0px;
     }
     li {
-        width:100%;
+        width:86%;
     }
     .popup {
-          width: 77%!important;
+     width: 92%;
+    padding: 39px 22px;
     }
+    .investigation-container{
+        width: 100vw;
+        padding-bottom: 132px;
+    }
+    .tooltip-text {
+    border-radius: 20px;
+    width: 100%;
+    top: 38px;
+    right: 0px;
+    padding: 0.9rem 2rem;
+}
 }
