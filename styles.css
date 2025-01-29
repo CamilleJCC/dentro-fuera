@@ -531,7 +531,7 @@ font-size: 1.3rem;
 /* Media Queries */
 @media (min-width: 768px) {
     .investigation-container {
-        grid-template-columns: 1.5fr 1fr;
+        grid-template-columns: 1fr 1fr;
         padding: 0rem 1rem;
         align-items: center;
         gap: 4rem;
